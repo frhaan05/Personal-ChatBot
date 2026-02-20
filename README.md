@@ -1,3 +1,5 @@
+This chatbot project was developed by Farhan Fahad purely for learning and educational purposes. It is a hands-on project to explore AI integration, web development, and API usage.
+
 #  Personal AI Chatbot System
 
 An intelligent, interactive AI-powered chatbot built using **FastAPI**, **Groq LLM API**, **Replicate API**, and a custom **HTML/CSS/JavaScript** frontend. The system combines rule-based responses with advanced Large Language Model (LLM) capabilities, along with speech and image generation features to deliver a modern conversational AI experience.
