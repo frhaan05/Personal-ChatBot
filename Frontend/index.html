@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Farhi's AI</title>
+  <!-- Google Font (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Imports JS Files -->
+  <audio id="msg-sound" src="/assests/pop.mp3" preload="auto"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Left Sidebar (Navigation) -->
+  <nav id="nav-sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <button id="close-nav" class="close-btns">
+        <img src="/SVGs/closed_left.svg" alt="Close" width="20" height="20">
+      </button>
+    </div>
+
+    <div class="sidebar-content">
+      <button id="new-chat-btn" class="nav-btn primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2" ry="2"/>
+          <line x1="9" y1="4" x2="9" y2="20"/>
+        </svg>
+        <span>New Chat</span>
+      </button>
+
+      <button id="chat-btn" class="nav-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <span>Search Chats</span>
+      </button>
+      <div id="search-chat-input" class="search-input-container" style="display: none;">
+        <input type="text" id="search-input" placeholder="Search chats..." />
+        <button id="clear-search-btn" class="icon-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <button id="project-btn" class="nav-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="9" x2="15" y2="9"></line>
+          <line x1="9" y1="15" x2="15" y2="15"></line>
+        </svg>
+        <span>New Project</span>
+      </button>
+
+      <!-- New container for project names in sidebar -->
+      <div id="project-list-sidebar" class="project-list-sidebar">
+        <strong>Projects</strong>
+        <ul id="project-items"></ul>
+      </div>
+
+      <div class="recent-history-section">
+        <strong>Recent Chats</strong>
+        <ul id="recent-history-list" class="history-list"></ul>
+      </div>
+    </div>
+
+    <button id="expand-nav" class="expand-btn" title="Expand Navigation">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Settings Sidebar -->
+  <div id="settings-sidebar" class="settings-sidebar">
+    <button id="close-settings" class="close-btn">
+      <img src="/SVGs/closed_sidebar.svg" alt="Close" class="icon" />
+    </button>
+    <h2>Setting</h2>
+
+    <div class="custom-select-wrapper">
+      <label for="voice">Voice</label>
+      <div class="custom-select" id="voice-select">
+        <div class="select-trigger">Auto-Detect</div>
+        <div class="options">
+          <span class="option" data-value="default">Default</span>
+          <span class="option" data-value="male">Male</span>
+          <span class="option" data-value="female">Female</span>
+          <span class="option" data-value="robotic">Robotic</span>
+        </div>
+      </div>
+
+      <button id="test-voice-btn" class="test-voice-btn"> Test ▶</button>
+      <button id="save-settings" class="save-btn">Save</button>
+    </div>
+
+    <!-- Voice Speed Control -->
+    <div class="setting-item speed-setting">
+      <label for="voice-speed" class="setting-label">Spoken Speed</label>
+      <div class="speed-control">
+        <!-- visible text label that updates -->
+        <div id="speed-label" class="speed-label"></div>
+        <!-- range slider -->
+        <input
+          id="voice-speed"
+          class="speed-range"
+          type="range"
+          min="0.6"
+          max="1.6"
+          step="0.5"
+          value="1.0"
+          aria-label="Voice speed"
+        />
+        <!-- anchors: visual markers for Slow / Normal / Fast -->
+        <div class="speed-anchors" aria-hidden="true">
+          <span class="anchor">Slow</span>
+          <span class="anchor center">Normal</span>
+          <span class="anchor">Fast</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="app">
+    <div class="chat-wrapper">
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="brand">
+          <img src="/assests/robot.png" alt="Logo" class="logo" />
+          <div class="brand-text">
+            <div class="title">Farhi's AI</div>
+            <div class="subtitle">Personal AI assistant</div>
+          </div>
+        </div>
+        <div class="header-actions" role="toolbar" aria-label="Chat actions">
+          <button id="clear-chat" class="icon-btn" title="Clear chat" style="background:none; border:none; cursor:pointer; padding:5px;">
+            <img src="../SVGs/clear_chat.svg" alt="Clear Chat Icon" />
+          </button>
+          <button id="settings-btn" class="icon-btn" title="Settings" style="background:none; border:none; cursor:pointer; padding:2px;">
+            <img src="../SVGs/Settings.svg" alt="Settings Icon" />
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat area -->
+      <main class="chat-main">
+        <div id="chat-box" class="chat-box" aria-live="polite">
+          <!-- Typing indicator as a bot row -->
+          <div id="typing-indicator" class="msg-row bot hidden" aria-hidden="true">
+            <div class="avatar">B</div>
+            <div class="bubble typing">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Input area -->
+      <footer class="chat-input-bar">
+        <textarea id="user-input" class="input-text" rows="1" placeholder="How Can I help you today?" style="font-weight: bold;"></textarea>
+        <button id="send-btn" class="send-btn" title="Send message">Send ➤</button>
+        <button id="mic-btn" class="icon-btn" title="Start voice input" style="background:none; border:none; cursor:pointer; padding:5px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="29" height="25" viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
