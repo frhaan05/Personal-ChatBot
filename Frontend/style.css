@@ -27,30 +27,31 @@ html, body {
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* prevents body scrolling */
 }
 
 /* === App Container === */
 .app {
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;  /* push chat to top */
   justify-content: center;
-  padding: 25px 5px;
+  padding: 20px;
 }
 
 /* === Chat UI: Main Wrapper === */
 .chat-wrapper {
   width: 100%;
   max-width: 1010px;
-  height: 783px;
+  height: 90vh;  /* make chat fit screen height */
   background: linear-gradient(180deg, rgba(236, 206, 183, 0.6), rgba(255, 255, 255, 0.659));
   border-radius: 20px;
   box-shadow: var(--shadow);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 4px solid rgb(226, 173, 112);
-  margin-left: -40px;
+  overflow: hidden;
+  margin-top: 20px;  /* small gap from top */
 }
 
 /* === Chat UI: Header === */
@@ -117,15 +118,16 @@ html, body {
 /* === Chat UI: Main Content and Messages === */
 .chat-main {
   flex: 1;
-  position: relative;
   padding: 18px 20px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-box {
-  height: 100%;
-  overflow-y: auto;
-  padding-bottom: 40px;
+  flex: 1;  /* take all available space */
+  overflow-y: auto;  /* scroll inside chat box only */
+  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -133,6 +135,7 @@ html, body {
   transition: all 0.15s ease;
 }
 
+/* === Messages === */
 .msg-row {
   display: flex;
   align-items: flex-end;
@@ -171,14 +174,12 @@ html, body {
   max-width: 72%;
   line-height: 1.0;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.258);
-  animation: fadeSlideIn 0.3s ease forwards;
 }
 
 .msg-row.bot .bubble {
   background: var(--bot-bubble);
   color: var(--text);
   border-top-left-radius: 6px;
-  animation: slideInLeft 0.70s ease both;
 }
 
 .msg-row.user .bubble {
@@ -186,7 +187,6 @@ html, body {
   color: rgb(0, 0, 0);
   border-top-right-radius: 6px;
   box-shadow: none;
-  animation: slideInRight 0.70s ease both;
 }
 
 .meta {
@@ -311,6 +311,22 @@ html, body {
 
 .send-btn:active { transform: translateY(1px); }
 
+.send-btn:active { transform: translateY(1px); }
+
+/* === Scrollbar Styling for chat box === */
+.chat-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+}
 /* === Chat UI: Microphone Button === */
 #mic-btn svg {
   transition: all 0.2s ease;
@@ -423,18 +439,23 @@ html, body {
   100% { transform: rotate(360deg); }
 }
 
-/* === Right Sidebar: Settings === */
 .settings-sidebar {
   position: fixed;
-  top: 0;
-  right: -320px;
-  width: 320px;
-  height: 100%;
+  top: 1%;                /* small gap from top */
+  right: -280px;           /* hidden by default */
+  width: 258px;
+  height: 98%;             /* balanced top and bottom */
   background: linear-gradient(180deg, rgba(236, 206, 183, 0.6), rgba(255, 255, 255, 0.659));
   backdrop-filter: blur(12px);
+  
+  /* borders on left, top, bottom */
   border-left: 4px solid rgb(226, 173, 112);
-  border-radius: 12px 0 0 12px;
+  border-top: 4px solid rgb(226, 173, 112);
+  border-bottom: 4px solid rgb(226, 173, 112);
+  
+  border-radius: 12px 0 0 12px;  /* rounded left corners */
   box-shadow: -20px 0 30px rgba(0, 0, 0, 0.1);
+  
   transition: right 0.35s ease;
   padding: 20px;
   z-index: 2000;
@@ -695,20 +716,26 @@ html, body {
 /* === Left Sidebar: Navigation === */
 .sidebar#nav-sidebar {
   position: fixed;
-  top: 0;
+  top: 1%;                /* small gap from top */
   left: 0;
-  width: 50px;
-  height: 100%;
+  width: 50px;             /* collapsed width */
+  height: 98%;             /* top and bottom spacing like right sidebar */
   background: #ead2bdcc;
-  border: 4px solid rgba(226, 173, 112, 0.814);
-  border-radius: 0 20px 20px 0;
+
+  /* borders on left, top, right, bottom */
+  border-left: 4px solid rgba(226, 173, 112, 0.814);
+  border-top: 4px solid rgba(226, 173, 112, 0.814);
+  border-bottom: 4px solid rgba(226, 173, 112, 0.814);
+  border-right: 4px solid rgba(226, 173, 112, 0.814);
+
+  border-radius: 0 20px 20px 0; /* rounded right corners */
   overflow: hidden;
   transition: width 0.3s ease, background 0.3s ease;
   z-index: 1000;
 }
 
 #nav-sidebar.open {
-  width: 280px;
+  width: 255px;
   background: linear-gradient(135deg, #f3e5d9, #ffe6cc);
 }
 
